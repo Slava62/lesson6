@@ -7,7 +7,10 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 import ru.slava62.dto.Category;
+import ru.slava62.dto.Product;
 import ru.slava62.service.CategoryService;
+import ru.slava62.service.ProductService;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.time.Duration;
@@ -33,6 +36,14 @@ public class RetrofitUtils {
     public CategoryService getCategoryService() throws MalformedURLException{
        return getRetrofit().create(CategoryService.class);
     }
+    public ProductService getProductService() throws MalformedURLException{
+        return getRetrofit().create(ProductService.class);
+    }
+    public Response<Product> getProductResponse(long productId, ProductService service) throws IOException {
+        return service
+                .getProduct((int)productId)
+                .execute();
+    }
 
     public Response<Category> getCategoryResponse(Integer categoryId, CategoryService service) throws IOException {
       return service
@@ -52,7 +63,7 @@ public class RetrofitUtils {
                 .execute();
     }
 
-    public static Response<Category> createCategoryResponse(Category category, CategoryService service) throws IOException{
+    public Response<Category> createCategoryResponse(Category category, CategoryService service) throws IOException{
         return service
                 .createCategory(category)
                 .execute();

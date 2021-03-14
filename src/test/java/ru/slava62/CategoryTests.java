@@ -5,6 +5,7 @@ import com.github.javafaker.Faker;;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
+import lombok.SneakyThrows;
 import okhttp3.ResponseBody;
 import org.junit.jupiter.api.*;
 import retrofit2.Converter;
@@ -32,9 +33,9 @@ public class CategoryTests {
    static Categories categoryForTest;
    static CategoriesMapper categoriesMapper;
    Faker faker = new Faker();
-
+    @SneakyThrows
     @BeforeAll
-    static void beforeAll() throws MalformedURLException {
+    static void beforeAll() {
         categoriesMapper=DbUtils.getCategoriesMapper();
         categoryService = RetrofitUtils.getCategoryService();
         categoryForTest=null;
@@ -47,11 +48,11 @@ public class CategoryTests {
         categoriesMapper.insert(categoryForTest);
     }
 
-
+    @SneakyThrows
     @Test
     @DisplayName("New category creation test")
     @Description("Check that the category added to the database is available")
-    void getNewCategoryFromDBTest() throws IOException {
+    void getNewCategoryFromDBTest()  {
         Response<Category> response=RetrofitUtils.getCategoryResponse(categoryForTest.getId(), categoryService);
         step("Check successful response");
         assertThat(response.isSuccessful(),is(true));
@@ -60,11 +61,11 @@ public class CategoryTests {
         step("Check title of category");
         assertThat(categoryForTest.getTitle(),equalTo(response.body().getTitle()));
     }
-
+    @SneakyThrows
     @Test
     @DisplayName("Update category negative test")
     @Description("Checking that the category update method is not allowed by using API")
-    void updateNewCategoryTest() throws IOException {
+    void updateNewCategoryTest()  {
         categoryForTest.setTitle("test_updated_category");
         Response response=RetrofitUtils.updateCategoryResponse(categoryForTest.getId(), categoryService);
         step("Check response code 405");
@@ -73,21 +74,22 @@ public class CategoryTests {
         assertThat(ErrorBody.getErorrMessage(response),is(equalTo("Method Not Allowed")));
 
     }
-
+    @SneakyThrows
     @Test
     @DisplayName("Delete category negative test")
     @Description("Checking that the category delete method is not allowed by using API")
-    void deleteNewCategoryTest() throws IOException {
+    void deleteNewCategoryTest()  {
         Response response=RetrofitUtils.deleteCategoryResponse(categoryForTest.getId(), categoryService);
         step("Check response code 405");
         assertThat(response.code(),is(405));
         step("Check response error is \"Method Not Allowed\"");
         assertThat(ErrorBody.getErorrMessage(response),is(equalTo("Method Not Allowed")));
     }
+    @SneakyThrows
     @Test
     @DisplayName("Create category negative test")
     @Description("Checking that the method of adding a category using the API is not implemented")
-    void createNewCategoryTest() throws IOException {
+    void createNewCategoryTest()  {
         Response response=RetrofitUtils.createCategoryResponse
                 (new Category(categoryForTest.getId(), categoryForTest.getTitle()
                         ,new ArrayList<Product>()), categoryService);
