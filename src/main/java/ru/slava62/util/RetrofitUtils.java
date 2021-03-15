@@ -45,6 +45,18 @@ public class RetrofitUtils {
                 .execute();
     }
 
+    public Response<Product> createProductResponse(Product product, ProductService service) throws IOException {
+        return service
+                .createProduct(product)//(int)productId) long productId
+                .execute();
+    }
+
+    public Response<Product> updateProductResponse(Product product, ProductService service) throws IOException {
+        return service
+                .updateProduct(product)//(int)productId) long productId
+                .execute();
+    }
+
     public Response<Category> getCategoryResponse(Integer categoryId, CategoryService service) throws IOException {
       return service
                 .getCategory(categoryId)

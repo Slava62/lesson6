@@ -14,11 +14,11 @@ import lombok.With;
 @NoArgsConstructor
 public class Product {
     @JsonProperty("id")
-    private Integer id;
+    private Long id;
     @JsonProperty("title")
     private String title;
     @JsonProperty("price")
     private Integer price;
-    @JsonProperty("categoryTitle")
-    private String categoryTitle;
+    @JsonProperty("categoryId")//Title")
+    private Long categoryId;//String categoryTitle;
 }

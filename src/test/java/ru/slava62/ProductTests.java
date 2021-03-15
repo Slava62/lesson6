@@ -11,6 +11,7 @@ import retrofit2.Converter;
 import retrofit2.Response;
 import ru.slava62.db.dao.CategoriesMapper;
 import ru.slava62.db.model.Products;
+import ru.slava62.db.model.ProductsExample;
 import ru.slava62.enums.CategoryType;
 import ru.slava62.dto.ErrorBody;
 import ru.slava62.dto.Product;
@@ -58,9 +59,8 @@ public class ProductTests {
                 .withTitle(faker.food().ingredient());*/
     }
 
-   /* @SneakyThrows
-    @Test
-    void createNewProductTest() {
+
+   /* void createNewProductTest() {
         *//*Products record=new Products();
         record.setTitle("test_product");
         record.setCategory_id(3L);
@@ -84,33 +84,43 @@ public class ProductTests {
         step("Check successful response");
         assertThat(response.isSuccessful(), is(true));
         step("Check product was added in DB");
-        assertThat(productForTest.getId(),equalTo((long)response.body().getId()));
+        assertThat(productForTest.getId(),equalTo(response.body().getId()));
         step("Check title of product");
         assertThat(productForTest.getTitle(),equalTo(response.body().getTitle()));
         step("Check price of product");
         assertThat(productForTest.getPrice(),equalTo(response.body().getPrice()));
         // assertThat(productsMapper.selectByPrimaryKey(Long.valueOf(productId)).getTitle()).isEqualTo(product.getTitle());
     }
-   /* @SneakyThrows
+    @SneakyThrows
     @Test
+    @DisplayName("Update product negative test")
+    @Description("Check that the product added to the database can't be updated")
+    void updateNewProductTest() {
+        Product product=new Product(productForTest.getId(),"test_product_updated",100,1L);
+        Response<Product> response=RetrofitUtils.updateProductResponse(product,productService);
+        step("Check response code 500");
+        assertThat(response.code(), is(500));
+        step("Check response error is \"Internal Server Error\"");
+        assertThat(ErrorBody.getErorrMessage(response),is(equalTo("Internal Server Error")));
+    }
+ @SneakyThrows
+    @Test
+ @DisplayName("Create new product negative test")
+ @Description("Check that the product  can't be  added")
     void createNewProductNegativeTest() {
-        retrofit2.Response<Product> response =
-                productService.createProduct(product.withId(555))
-                        .execute();
-//        productId = Objects.requireNonNull(response.body()).getId();
-        assertThat(response.code(), is(equalTo(400)));
-        if (response != null && !response.isSuccessful() && response.errorBody() != null) {
-            ResponseBody body = response.errorBody();
-            Converter<ResponseBody, ErrorBody> converter = RetrofitUtils.getRetrofit().responseBodyConverter(ErrorBody.class, new Annotation[0]);
-            ErrorBody errorBody = converter.convert(body);
-            assertThat(errorBody.getMessage(),is(equalTo("Id must be null for new entity")));
-        }
-    }*/
+     Product product=new Product(null,
+             productForTest.getTitle(),productForTest.getPrice(),
+             productForTest.getCategory_id());
+     Response<Product> response=RetrofitUtils.createProductResponse(product,productService);
+     step("Check response code 500");
+     assertThat(response.code(), is(equalTo(500)));
+    // productsMapper.deleteByPrimaryKey(response.body().getId());
+    }
 
     @AfterEach
     void tearDown() {
       //  if (productId!=null)
       //      DbUtils.getCategoriesMapper().deleteByPrimaryKey(productId);
-      if (productForTest!=null) productsMapper.deleteByPrimaryKey(productForTest.getId());
+if (productForTest!=null) productsMapper.deleteByPrimaryKey(productForTest.getId());
     }
 }
