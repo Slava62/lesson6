@@ -2,6 +2,7 @@ package ru.slava62.util;
 
 import lombok.experimental.UtilityClass;
 import okhttp3.OkHttpClient;
+import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -36,12 +37,14 @@ public class RetrofitUtils {
     public CategoryService getCategoryService() throws MalformedURLException{
        return getRetrofit().create(CategoryService.class);
     }
+
     public ProductService getProductService() throws MalformedURLException{
         return getRetrofit().create(ProductService.class);
     }
-    public Response<Product> getProductResponse(long productId, ProductService service) throws IOException {
+
+    public Response<Product> getProductResponse(Long productId, ProductService service) throws IOException {
         return service
-                .getProduct((int)productId)
+                .getProduct(productId)
                 .execute();
     }
 
@@ -54,6 +57,12 @@ public class RetrofitUtils {
     public Response<Product> updateProductResponse(Product product, ProductService service) throws IOException {
         return service
                 .updateProduct(product)//(int)productId) long productId
+                .execute();
+    }
+
+    public Response<ResponseBody> deleteProductResponse(Long productId, ProductService service) throws IOException {
+        return service
+                .deleteProduct(productId)
                 .execute();
     }
 
@@ -80,4 +89,6 @@ public class RetrofitUtils {
                 .createCategory(category)
                 .execute();
     }
+
+
 }

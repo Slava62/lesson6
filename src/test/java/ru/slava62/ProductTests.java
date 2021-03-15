@@ -30,7 +30,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @Epic("Market tests")
 @Feature("Product test-suite")
 public class ProductTests {
-  //  Integer productId;
+    Integer categoryId;
     static ProductService productService;
     static ProductsMapper productsMapper;
     static CategoriesMapper categoriesMapper;
@@ -51,7 +51,8 @@ public class ProductTests {
         productForTest=new Products();
         productForTest.setPrice((int) (Math.random() * 1000 + 1));
         productForTest.setTitle("test_product");//faker.food().spice());
-        productForTest.setCategory_id((long) categoriesMapper.selectByPrimaryKey((int)(Math.random() * 3 + 1)).getId());//(long) (Math.random() * 10 + 1));
+        categoryId=(int)(Math.random() * 3 + 1);
+        productForTest.setCategory_id((long) categoriesMapper.selectByPrimaryKey(categoryId).getId());
         productsMapper.insert(productForTest);
        /* product = new Product()
                 .withCategoryTitle(CategoryType.FOOD.getTitle())
@@ -93,34 +94,52 @@ public class ProductTests {
     }
     @SneakyThrows
     @Test
-    @DisplayName("Update product negative test")
-    @Description("Check that the product added to the database can't be updated")
+    @DisplayName("Update product test")
+    @Description("Check that the product was updated")
     void updateNewProductTest() {
-        Product product=new Product(productForTest.getId(),"test_product_updated",100,1L);
+        Product product=new Product(productForTest.getId(),
+                "test_product_updated",(int) (Math.random() * 1000 + 1),
+                categoriesMapper.selectByPrimaryKey(categoryId).getTitle());
         Response<Product> response=RetrofitUtils.updateProductResponse(product,productService);
-        step("Check response code 500");
-        assertThat(response.code(), is(500));
-        step("Check response error is \"Internal Server Error\"");
-        assertThat(ErrorBody.getErorrMessage(response),is(equalTo("Internal Server Error")));
+        step("Check response code 200");
+        assertThat(response.code(), is(200));
+//        step("Check response error is \"Internal Server Error\"");
+//        assertThat(ErrorBody.getErorrMessage(response),is(equalTo("Internal Server Error")));
     }
  @SneakyThrows
-    @Test
- @DisplayName("Create new product negative test")
- @Description("Check that the product  can't be  added")
-    void createNewProductNegativeTest() {
+ @Test
+ @DisplayName("Create new product test")
+ @Description("Check that the product was added in DB")
+    void createNewProductTest() {
      Product product=new Product(null,
              productForTest.getTitle(),productForTest.getPrice(),
-             productForTest.getCategory_id());
+             categoriesMapper.selectByPrimaryKey(categoryId).getTitle());
      Response<Product> response=RetrofitUtils.createProductResponse(product,productService);
-     step("Check response code 500");
-     assertThat(response.code(), is(equalTo(500)));
-    // productsMapper.deleteByPrimaryKey(response.body().getId());
+     step("Check response code 201");
+     assertThat(response.code(), is(equalTo(201)));
+     step("Check that the product has appeared in the database");
+             assertThat(productsMapper.selectByPrimaryKey(response.body().getId()).getId(),
+             is(equalTo(response.body().getId())));
+     if(response.isSuccessful())
+     productsMapper.deleteByPrimaryKey(response.body().getId());
+    }
+
+    @SneakyThrows
+    @Test
+    @DisplayName("Delete new product test")
+    @Description("Check that the product was deleted from DB by using API")
+    void deleteNewProductTest() {
+        Response<ResponseBody> response=RetrofitUtils.deleteProductResponse(productForTest.getId(),productService);
+        step("Check response code 200");
+        assertThat(response.code(),is(equalTo(200)));
+        step("Check that the product was deleted from database");
+        Products temp=productsMapper.selectByPrimaryKey(productForTest.getId());
+        assertThat(productsMapper.selectByPrimaryKey(productForTest.getId()),
+                is(equalTo(null)));
     }
 
     @AfterEach
     void tearDown() {
-      //  if (productId!=null)
-      //      DbUtils.getCategoriesMapper().deleteByPrimaryKey(productId);
-if (productForTest!=null) productsMapper.deleteByPrimaryKey(productForTest.getId());
+        if (productForTest!=null) productsMapper.deleteByPrimaryKey(productForTest.getId());
     }
 }

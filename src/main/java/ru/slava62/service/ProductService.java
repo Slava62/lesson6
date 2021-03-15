@@ -10,11 +10,11 @@ public interface ProductService {
     Call<Product> createProduct(@Body Product createProductRequest);
 
     @DELETE("products/{id}")
-    Call<ResponseBody> deleteProduct(@Path("id") int id);
+    Call<ResponseBody> deleteProduct(@Path("id") long id);
 
     @GET("products/{id}")
-    Call<Product> getProduct(@Path("id") int id);
+    Call<Product> getProduct(@Path("id") long id);
 
     @PUT("products")///{id}
-    Call<Product> updateProduct(@Body Product createProductRequest);//@Path("id") int id,
+    Call<Product> updateProduct(@Body Product updateProductRequest);//@Path("id") int id,
 }

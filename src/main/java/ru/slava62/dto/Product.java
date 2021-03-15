@@ -19,6 +19,6 @@ public class Product {
     private String title;
     @JsonProperty("price")
     private Integer price;
-    @JsonProperty("categoryId")//Title")
-    private Long categoryId;//String categoryTitle;
+    @JsonProperty("categoryTitle")
+    private String categoryTitle;
 }
