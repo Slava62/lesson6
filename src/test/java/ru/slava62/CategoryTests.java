@@ -6,10 +6,9 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import lombok.SneakyThrows;
-import okhttp3.ResponseBody;
 import org.junit.jupiter.api.*;
-import retrofit2.Converter;
 import retrofit2.Response;
+import ru.slava62.allure.env.EnvironmentInfo;
 import ru.slava62.db.dao.CategoriesMapper;
 import ru.slava62.db.model.Categories;
 import ru.slava62.dto.Category;
@@ -18,8 +17,7 @@ import ru.slava62.dto.Product;
 import ru.slava62.service.CategoryService;
 import ru.slava62.util.DbUtils;
 import ru.slava62.util.RetrofitUtils;
-import java.io.IOException;
-import java.net.MalformedURLException;
+
 import java.util.ArrayList;
 
 import static org.hamcrest.Matchers.*;
@@ -71,7 +69,7 @@ public class CategoryTests {
         step("Check response code 405");
         assertThat(response.code(),is(405));
         step("Check response error is \"Method Not Allowed\"");
-        assertThat(ErrorBody.getErorrMessage(response),is(equalTo("Method Not Allowed")));
+        assertThat(ErrorBody.getErrorMessage(response),is(equalTo("Method Not Allowed")));
 
     }
     @SneakyThrows
@@ -83,7 +81,7 @@ public class CategoryTests {
         step("Check response code 405");
         assertThat(response.code(),is(405));
         step("Check response error is \"Method Not Allowed\"");
-        assertThat(ErrorBody.getErorrMessage(response),is(equalTo("Method Not Allowed")));
+        assertThat(ErrorBody.getErrorMessage(response),is(equalTo("Method Not Allowed")));
     }
     @SneakyThrows
     @Test
@@ -96,7 +94,7 @@ public class CategoryTests {
         step("Check response code 404");
         assertThat(response.code(),is(404));
         step("Check response error is \"Not Found\"");
-        assertThat(ErrorBody.getErorrMessage(response),is(equalTo("Not Found")));
+        assertThat(ErrorBody.getErrorMessage(response),is(equalTo("Not Found")));
     }
     @AfterEach
     void tearDown() {
@@ -106,7 +104,7 @@ public class CategoryTests {
 
     @AfterAll
     static void afterAll() {
-
+        EnvironmentInfo.setAllureEnvironment();
     }
 
 

@@ -1,10 +1,9 @@
 package ru.slava62.util;
 
-import lombok.SneakyThrows;
-import lombok.experimental.UtilityClass;
 
+import lombok.experimental.UtilityClass;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
@@ -16,15 +15,14 @@ public class ConfigUtils {
     static {
         try {
             configFile = new FileInputStream("src/test/resources/application.properties");
-        } catch (FileNotFoundException e) {
+            prop.load(configFile);
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    @SneakyThrows
-    public String getBaseUrl() {
-        prop.load(configFile);
-        return prop.getProperty("url");
-    }
+
+    public String getBaseUrl() {return prop.getProperty("url");}
+    public String getStand() {return prop.getProperty("stand");}
 
 }

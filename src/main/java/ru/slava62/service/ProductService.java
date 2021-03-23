@@ -15,6 +15,9 @@ public interface ProductService {
     @GET("products/{id}")
     Call<Product> getProduct(@Path("id") long id);
 
-    @PUT("products")///{id}
-    Call<Product> updateProduct(@Body Product updateProductRequest);//@Path("id") int id,
+    @PUT("products")
+    Call<Product> updateProduct(@Body Product updateProductRequest);
+
+    @GET("products")
+    Call<ResponseBody> getAllProducts();
 }

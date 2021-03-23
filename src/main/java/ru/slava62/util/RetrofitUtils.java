@@ -90,5 +90,9 @@ public class RetrofitUtils {
                 .execute();
     }
 
-
+    public static Response<ResponseBody> getAllProductsResponse(ProductService service) throws IOException {
+        return service
+                .getAllProducts()
+                .execute();
+    }
 }
