@@ -104,7 +104,7 @@ public class CategoryTests {
 
     @AfterAll
     static void afterAll() {
-        EnvironmentInfo.setAllureEnvironment();
+        //EnvironmentInfo.setAllureEnvironment();
     }
 
 

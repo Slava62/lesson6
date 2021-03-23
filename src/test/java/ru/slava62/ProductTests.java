@@ -197,6 +197,6 @@ public class ProductTests {
 
     @AfterAll
     static void afterAll() {
-        EnvironmentInfo.setAllureEnvironment();
+        //EnvironmentInfo.setAllureEnvironment();
     }
 }

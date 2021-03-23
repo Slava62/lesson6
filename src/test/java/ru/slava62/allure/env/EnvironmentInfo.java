@@ -17,6 +17,7 @@ public class EnvironmentInfo {
         allureProperties.put("URL", ConfigUtils.getBaseUrl());
         allureProperties.put("Stand", ConfigUtils.getStand());
       try {
+
           allureProperties.store(new FileOutputStream
                   ("target/allure-results/environment.properties")
                   ,"Current environment");
