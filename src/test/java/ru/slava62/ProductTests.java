@@ -110,7 +110,7 @@ public class ProductTests {
     @Description("Check that the product was updated")
     void updateNewProductTest() {
         Product product=new Product(productForTest.getId(),
-                "test_product_updated",(int) (Math.random() * 1000 + 1),
+                "test_product_updated",1,
                 categoriesMapper.selectByPrimaryKey(categoryId).getTitle());
         Response<Product> response=RetrofitUtils.updateProductResponse(product,productService);
         step("Check response code 200");
