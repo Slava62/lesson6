@@ -47,7 +47,7 @@ public class ProductTests {
         productForTest=new Products();
         productForTest.setPrice((int) (Math.random() * 1000 + 1));
         productForTest.setTitle("test_product");//faker.food().spice());
-        categoryId=(int)(Math.random() * 3 + 1);
+        categoryId=(int)(Math.random() * 2 + 1);
         productForTest.setCategory_id((long) categoriesMapper.selectByPrimaryKey(categoryId).getId());
         productsMapper.insert(productForTest);
     }
@@ -197,6 +197,6 @@ public class ProductTests {
 
     @AfterAll
     static void afterAll() {
-        //EnvironmentInfo.setAllureEnvironment();
+        EnvironmentInfo.setAllureEnvironment();
     }
 }

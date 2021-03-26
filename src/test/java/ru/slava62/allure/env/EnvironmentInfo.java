@@ -19,7 +19,7 @@ public class EnvironmentInfo {
       try {
 
           allureProperties.store(new FileOutputStream
-                  ("target/allure-results/environment.properties")
+                  ("src/test/resources/environment.properties")
                   ,"Current environment");
       } catch (IOException e) {
           e.printStackTrace();
